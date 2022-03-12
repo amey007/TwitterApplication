@@ -10,7 +10,7 @@ import com.bumptech.glide.Glide
 import com.codepath.apps.restclienttemplate.R
 import org.w3c.dom.Text
 
-class TweetsAdapter(val tweets: List<Tweet>) : RecyclerView.Adapter<TweetsAdapter.ViewHolder>() {
+class TweetsAdapter(val tweets: ArrayList<Tweet>) : RecyclerView.Adapter<TweetsAdapter.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TweetsAdapter.ViewHolder {
         // Responsible for infalting the items in the tweets list
         val context = parent.context
@@ -30,6 +30,7 @@ class TweetsAdapter(val tweets: List<Tweet>) : RecyclerView.Adapter<TweetsAdapte
         // set item view based on views and data model
         holder.tvUserName.text = tweet.user?.name   //? handles the null object
         holder.tvTweetBody.text = tweet.body
+        holder.tvTimeStamp.text = tweet.createdAt
 
         Glide.with(holder.itemView).load(tweet.user?.publicImageUrl).into(holder.ivProfileImage)
     }
@@ -38,9 +39,22 @@ class TweetsAdapter(val tweets: List<Tweet>) : RecyclerView.Adapter<TweetsAdapte
         return tweets.size
     }
 
+    // Clean all elements of the recycler
+    fun clear() {
+        tweets.clear()
+        notifyDataSetChanged()
+    }
+
+    // Add a list of items -- change to type used
+    fun addAll(tweetList: List<Tweet>) {
+        tweets.addAll(tweetList)
+        notifyDataSetChanged()
+    }
+
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         val ivProfileImage = itemView.findViewById<ImageView>(R.id.ivProfileImage)
         val tvUserName = itemView.findViewById<TextView>(R.id.tvUsername)
         val tvTweetBody = itemView.findViewById<TextView>(R.id.tvTweetBody)
+        val tvTimeStamp = itemView.findViewById<TextView>(R.id.tvTimeStamp)
     }
 }
